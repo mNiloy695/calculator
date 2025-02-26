@@ -1,9 +1,10 @@
 import tkinter
 from tkinter import *
+import re
 
 root = Tk()
 root.title("Calculator")
-root.geometry("510x570+100+200")
+root.geometry("510x600+100+200")
 root.configure(bg='black')
 root.resizable(False, False)
 
@@ -14,7 +15,7 @@ button_width = 4
 button_height = 1
 button_font = ('arial', 30)
 x_offset = 10
-y_offset = 110
+y_offset = 130
 button_gap = 130
 row_gap = 90
 
@@ -48,6 +49,11 @@ def answer():
         label.config(text=equation)
         return
 
+    if len(set(re.findall(r'[+\-*/%]', equation))) > 1:
+        equation = "আমি এখনো বাচ্চা, বড় হলে পারব। এটা সলভ করতে !"
+        label.config(text=equation, font=('arial', 16), height=3)
+        return
+
     if '+' in equation:
         operands = equation.split('+')
         ans = sum(float(i) for i in operands)
@@ -66,7 +72,18 @@ def answer():
         operands = equation.split('/')
         ans = float(operands[0])
         for num in operands[1:]:
-            ans /= float(num)
+            if(int(num)==0):
+                ans="Can not divided by zero"
+            else:
+                ans /= float(num)
+    elif '%' in equation:
+        ans=0
+        operands=equation.split('%')
+        operands.remove('')
+        print(operands)
+        num=operands[0]
+        ans=float(num)/100.00
+
 
     equation = str(ans)
     label.config(text=equation)
